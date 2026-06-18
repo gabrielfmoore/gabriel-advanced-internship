@@ -212,17 +212,14 @@ export default function Library() {
               {!showSavedSkeleton &&
                 savedBooks.length === 0 &&
                 !libraryError && (
-                  <>
-                    <div className="for-you__sub--title">0 items</div>
-                    <div className="finished__books--block-wrapper">
-                      <div className="finished__books--title">
-                        Save your favorite books!
-                      </div>
-                      <div className="finished__books--sub-title">
-                        When you save a book, it will appear here.
-                      </div>
+                  <div className="finished__books--block-wrapper">
+                    <div className="finished__books--title">
+                      Save your favorite books!
                     </div>
-                  </>
+                    <div className="finished__books--sub-title">
+                      When you save a book, it will appear here.
+                    </div>
+                  </div>
                 )}
 
               <div className="for-you__title">Finished</div>
