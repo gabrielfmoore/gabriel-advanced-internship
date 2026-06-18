@@ -1,37 +1,38 @@
-import { createClient } from "@/lib/supabase/server";
-import { NextResponse } from "next/server";
+import { createServerClient } from "@supabase/ssr";
+import { NextRequest, NextResponse } from "next/server";
 
-function redirectWithAuthError(origin: string, auth: string, message?: string) {
-  const params = new URLSearchParams({ auth });
-  if (message) {
-    params.set("auth_message", message);
-  }
-  return NextResponse.redirect(`${origin}/?${params}`);
-}
-
-export async function GET(request: Request) {
+export async function GET(request: NextRequest) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
-  const oauthError = searchParams.get("error");
-  const errorDescription = searchParams.get("error_description");
-
-  if (oauthError) {
-    return redirectWithAuthError(origin, oauthError, errorDescription ?? undefined);
-  }
 
   if (!code) {
-    return redirectWithAuthError(origin, "cancelled");
+    return NextResponse.redirect(`${origin}/`);
   }
 
-  const supabase = await createClient();
+  const response = NextResponse.redirect(`${origin}/for-you`);
+
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
+    {
+      cookies: {
+        getAll() {
+          return request.cookies.getAll();
+        },
+        setAll(cookiesToSet) {
+          cookiesToSet.forEach(({ name, value, options }) => {
+            response.cookies.set(name, value, options);
+          });
+        },
+      },
+    },
+  );
+
   const { error } = await supabase.auth.exchangeCodeForSession(code);
 
   if (error) {
-    return redirectWithAuthError(origin, "exchange_failed", error.message);
+    return NextResponse.redirect(`${origin}/?auth=exchange_failed`);
   }
 
-  const next = searchParams.get("next");
-  const redirectPath = next?.startsWith("/") ? next : "/for-you";
-
-  return NextResponse.redirect(`${origin}${redirectPath}`);
+  return response;
 }
