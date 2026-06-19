@@ -52,6 +52,13 @@ export default function Player({ book: bookProp }: PlayerProps) {
     }
   };
 
+  const skipSeconds = (seconds: number) => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    const max = Number.isFinite(audio.duration) ? audio.duration : duration;
+    handleSeek(Math.min(max, Math.max(0, audio.currentTime + seconds)));
+  };
+
   return (
     <div className="player">
       <audio
@@ -84,7 +91,8 @@ export default function Player({ book: bookProp }: PlayerProps) {
           <button
             type="button"
             className="player__controls--btn"
-            aria-label="Previous"
+            aria-label="Rewind 10 seconds"
+            onClick={() => skipSeconds(-10)}
           >
             <GrBackTen stroke="#fff" strokeWidth={0} size={28} />
           </button>
@@ -104,7 +112,8 @@ export default function Player({ book: bookProp }: PlayerProps) {
           <button
             type="button"
             className="player__controls--btn"
-            aria-label="Next"
+            aria-label="Forward 10 seconds"
+            onClick={() => skipSeconds(10)}
           >
             <GrForwardTen stroke="#fff" strokeWidth={0} size={28} />
           </button>

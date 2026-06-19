@@ -1777,6 +1777,25 @@ main {
     display: flex;
   }
 
+  .player {
+    flex-direction: column;
+    height: auto;
+    padding: 16px 24px;
+    gap: 12px;
+  }
+
+  .player__element {
+    width: 100%;
+  }
+
+  .player__track--wrapper {
+    justify-content: center;
+  }
+
+  .player__progress--bar {
+    max-width: 100%;
+  }
+
   .landing__content {
     display: flex;
     flex-direction: column;

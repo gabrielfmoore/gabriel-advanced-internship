@@ -176,8 +176,7 @@ export default function Library() {
     allBooksLoading ||
     (user !== null && savedIds.length > 0 && savedBooks.length === 0);
 
-  const showFinishedSkeleton =
-    authLoading || libraryLoading || allBooksLoading;
+  const showFinishedSkeleton = authLoading || libraryLoading || allBooksLoading;
 
   return (
     <div className="wrapper main__wrapper">
@@ -234,7 +233,9 @@ export default function Library() {
                 <>
                   <div className="for-you__sub--title">0 items</div>
                   <div className="finished__books--block-wrapper">
-                    <div className="finished__books--title">Done and dusted!</div>
+                    <div className="finished__books--title">
+                      Done and dusted!
+                    </div>
                     <div className="finished__books--sub-title">
                       When you finish a book, you can find it here later.
                     </div>
